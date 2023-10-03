@@ -18,14 +18,14 @@ WASM2C=$(RLBOX_ROOT)/build/_deps/mod_wasm2c-src/bin/wasm2c
 #CFLAGS for compiling files to place nice with wasm2c
 WASM_CFLAGS=-Wl,--export-all -Wl,--no-entry -Wl,--growable-table -Wl,--stack-first -Wl,-z,stack-size=1048576 -Wl,--import-memory -Wl,--import-table
 
-all: mylib.wasm mylib.wasm.c myapp
+all: mylib.wasm mylib.wasm.c mylib.wasm.o myapp
 
 clean:
 	rm -rf mylib.wasm mylib.wasm.c mylib.wasm.h myapp *.o
 
 #Step 1: build our library into wasm, using clang from the wasi-sdk
-mylib.wasm: mylib.c
-	$(WASI_CLANG) --sysroot $(WASI_SYSROOT) -O3 $(WASM_CFLAGS) dummy_main.c mylib.c -o mylib.wasm
+mylib.wasm: ./rust_from_c/src/mylib.c
+	$(WASI_CLANG) --sysroot $(WASI_SYSROOT) -O3 $(WASM_CFLAGS) dummy_main.c ./rust_from_c/src/mylib.c -o mylib.wasm
 
 #Step 2: use wasm2c to convert our wasm to a C implementation of wasm we can link with our app.
 mylib.wasm.c: mylib.wasm
