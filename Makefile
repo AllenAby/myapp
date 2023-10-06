@@ -23,13 +23,28 @@ all: mylib.wasm mylib.wasm.c mylib.wasm.o myapp
 clean:
 	rm -rf mylib.wasm mylib.wasm.c mylib.wasm.h myapp *.o
 
-#Step 1: build our library into wasm, using clang from the wasi-sdk
-mylib.wasm: ./rust_from_c/src/mylib.c
-	$(WASI_CLANG) --sysroot $(WASI_SYSROOT) -O3 $(WASM_CFLAGS) dummy_main.c ./rust_from_c/src/mylib.c -o mylib.wasm
+# #Step 1: build our library into wasm, using clang from the wasi-sdk
+# mylib.wasm: ./rust_from_c/src/mylib.c
+# 	$(WASI_CLANG) --sysroot $(WASI_SYSROOT) -O3 $(WASM_CFLAGS) dummy_main.c ./rust_from_c/src/mylib.c -o mylib.wasm
+
+# #Step 2: use wasm2c to convert our wasm to a C implementation of wasm we can link with our app.
+# mylib.wasm.c: mylib.wasm
+# 	$(WASM2C) mylib.wasm -o mylib.wasm.c
+
+# #Step 3: compiling and linking our application with our library
+# mylib.wasm.o: mylib.wasm.c
+# 	$(CC) -c $(WASI_RUNTIME_FILES) -c $(WASI_RUNTIME_FILES2) -I$(RLBOX_INCLUDE) -I$(RLBOX_ROOT)/include -I$(WASM2C_RUNTIME_PATH) mylib.wasm.c
+
+# myapp: mylib.wasm.o
+# 	$(CXX) -std=c++17 main.cpp -o myapp -I$(RLBOX_INCLUDE) -I$(RLBOX_ROOT)/include -I$(WASM2C_RUNTIME_PATH) *.o -lpthread
+
+
+
+# USING RUST COMPILED TO WASI
 
 #Step 2: use wasm2c to convert our wasm to a C implementation of wasm we can link with our app.
-mylib.wasm.c: mylib.wasm
-	$(WASM2C) mylib.wasm -o mylib.wasm.c
+mylib.wasm.c: rust_from_c/target/wasm32-wasi/debug/rust_from_c.wasm
+	$(WASM2C) rust_from_c/target/wasm32-wasi/debug/rust_from_c.wasm -o mylib.wasm.c
 
 #Step 3: compiling and linking our application with our library
 mylib.wasm.o: mylib.wasm.c
