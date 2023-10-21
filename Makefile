@@ -16,6 +16,7 @@ WASI_SYSROOT=$(WASI_SDK_ROOT)/share/wasi-sysroot
 WASM2C=$(RLBOX_ROOT)/build/_deps/mod_wasm2c-src/bin/wasm2c
 
 #CFLAGS for compiling files to place nice with wasm2c
+# lOOK INTO PASSING THESE FLAGS AT CARGO BUILD
 WASM_CFLAGS=-Wl,--export-all -Wl,--no-entry -Wl,--growable-table -Wl,--stack-first -Wl,-z,stack-size=1048576 -Wl,--import-memory -Wl,--import-table
 
 all: mylib.wasm mylib.wasm.c mylib.wasm.o myapp
