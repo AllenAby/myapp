@@ -59,6 +59,9 @@ int main(int argc, char const *argv[]) {
   });
   printf("OK? = %d\n", ok);
 // ANCHOR_END: add
+sandbox.invoke_sandbox_function(hello_from_rust);
+
+sandbox.invoke_sandbox_function(filewrite_from_rust);
 
 // hello_from_rust();
 // int sum = sum_from_rust(3, 4);
