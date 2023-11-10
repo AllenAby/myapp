@@ -19,10 +19,10 @@ WASM2C=$(RLBOX_ROOT)/build/_deps/mod_wasm2c-src/bin/wasm2c
 # lOOK INTO PASSING THESE FLAGS AT CARGO BUILD
 WASM_CFLAGS=-Wl,--export-all -Wl,--no-entry -Wl,--growable-table -Wl,--stack-first -Wl,-z,stack-size=1048576 -Wl,--import-memory -Wl,--import-table
 
-all: mylib.wasm mylib.wasm.c mylib.wasm.o myapp
+all: rust_from_c/target/wasm32-wasi/debug/rust_from_c.wasm mylib.wasm.c mylib.wasm.o myapp
 
 clean:
-	rm -rf mylib.wasm mylib.wasm.c mylib.wasm.h myapp *.o
+	rm -rf rust_from_c/target/wasm32-wasi/debug/rust_from_c.wasm mylib.wasm.c mylib.wasm.h myapp *.o
 	cd rust_from_c && cargo clean && cd -
 
 # #Step 1: build our library into wasm, using clang from the wasi-sdk
