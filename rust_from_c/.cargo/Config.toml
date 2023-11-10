@@ -1,18 +1,2 @@
 [build]
-# rustflags = ["--export-all", "--no-entry", "--growable-table", "--stack-first", "-z,stack-size=1048576", "--import-memory", "--import-table"]
-
 rustflags = ["-C", "linker=../../rlbox_wasm2c_sandbox/build/_deps/wasiclang-src/bin/clang", "-C", "link-args=-Wl,--export-all -Wl,--no-entry -Wl,--growable-table -Wl,--stack-first -Wl,-z,stack-size=1048576 -Wl,--import-memory -Wl,--import-table"]
-
-# RUSTFLAGS='-C target-feature=+export-all' cargo build -v --target wasm32-wasi
-
-# RUSTFLAGS='-C linker=../../rlbox_wasm2c_sandbox/build/_deps/wasiclang-src/bin/clang' cargo build -v --target wasm32-wasi
-
-# RUSTFLAGS='-C llvm-args=--help' cargo build -v --target wasm32-wasi
-
-# RUSTFLAGS='-C linker-flavor=wasm-ld' cargo build -v --target wasm32-wasi
-
-# RUSTFLAGS='-C linker=../../rlbox_wasm2c_sandbox/build/_deps/wasiclang-src/bin/clang' cargo build -v --target wasm32-unknown-unknown
-
-# RUSTFLAGS='-C linker=../../rlbox_wasm2c_sandbox/build/_deps/wasiclang-src/bin/clang -C target-feature=+export-all' cargo build -v --target wasm32-unknown-unknown
-
-# RUSTFLAGS='-C linker=../../rlbox_wasm2c_sandbox/build/_deps/wasiclang-src/bin/clang -C target-feature=+export-all' cargo build -v --target wasm32-unknown-unknown
