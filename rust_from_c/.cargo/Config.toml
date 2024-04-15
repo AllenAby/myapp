@@ -1,2 +1,14 @@
 [build]
-rustflags = ["-C", "linker=../../rlbox_wasm2c_sandbox/build/_deps/wasiclang-src/bin/clang", "-C", "link-args=-Wl,--export-all -Wl,--no-entry -Wl,--growable-table -Wl,--stack-first -Wl,-z,stack-size=1048576 -Wl,--import-memory -Wl,--import-table"]
+target = "wasm32-rlbox.json"
+
+[target.'cfg(target_arch = "x86_64------")']
+rustflags = [
+    "-C", "link-arg=-Wl,--export-all",
+    "-C", "link-arg=-Wl,--no-entry",
+    "-C", "link-arg=-Wl,--growable-table",
+    "-C", "link-arg=-Wl,--stack-first",
+    "-C", "link-arg=-Wl,-z,stack-size=1048576",
+    "-C", "link-arg=-Wl,--import-memory",
+    "-C", "link-arg=-Wl,--import-table",
+    "-C", "link-arg=bogus",
+]

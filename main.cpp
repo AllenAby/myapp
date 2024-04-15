@@ -25,35 +25,40 @@ using namespace rlbox;
 // RLBOX_DEFINE_BASE_TYPES_FOR(mylib, wasm2c);
 RLBOX_DEFINE_BASE_TYPES_FOR(rust_from_c, wasm2c);
 
-// // Declare callback function we're going to call from sandboxed code.
-// void hello_cb(rlbox_sandbox_mylib& _, tainted_mylib<const char*> str);
 
 int main(int argc, char const *argv[]) {
-// ANCHOR_END: imports
-// ANCHOR: hello
   // Declare and create a new sandbox
   // rlbox_sandbox_mylib sandbox;
   rlbox_sandbox_rust_from_c sandbox;
   sandbox.create_sandbox();
 
-// ANCHOR: sum_from_rust
+  sandbox.invoke_sandbox_function(hello_from_rust);
+
   // call the sum_from_rust function and check the result:
   auto ok = sandbox.invoke_sandbox_function(sum_from_rust, 3, 4)
                    .copy_and_verify([](int ret){
     printf("Adding... 3+4 = %d\n", ret);
-    return ret == 7;
+    return ret == 10;
   });
   printf("OK? = %d\n", ok);
-// ANCHOR_END: add
-sandbox.invoke_sandbox_function(hello_from_rust);
+  // sandbox.template INTERNAL_invoke_with_func_ptr<decltype(sum_from_rust)>(
+  //     "sum_from_rust",
+  //     sandbox_lookup_symbol_helper(RLBOX_USE_STATIC_CALLS(), sum_from_rust), 3, 4).copy_and_verify([](int ret) { printf("%d\n", ret); });
 
-sandbox.invoke_sandbox_function(filewrite_from_rust);
+  //sandbox.invoke_sandbox_function(hello_from_rust).copy_and_verify([](int ret) { printf("%ds\n", ret); });
+  // sandbox.template INTERNAL_invoke_with_func_ptr<decltype(hello_from_rust)>(
+  //     "hello_from_rust",
+  //     sandbox_lookup_symbol_helper(RLBOX_USE_STATIC_CALLS(), hello_from_rust)).copy_and_verify([](int ret) { printf("%d\n", ret); });
 
-// ANCHOR: main-end
+  // sandbox.invoke_sandbox_function(filewrite_from_rust);
+
+  sandbox.invoke_sandbox_function(train_from_rust).copy_and_verify([](float ret) {
+    printf("%f\n", ret);
+  });
+
   // destroy sandbox
   sandbox.destroy_sandbox();
 
   return 0;
 }
-// ANCHOR_END: main-end
 
